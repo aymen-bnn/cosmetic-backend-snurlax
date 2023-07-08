@@ -1,11 +1,14 @@
 
 const productRouter = require('express').Router()
-const { createProduct , updateProduct , deleteProduct , getProduct , getProducts , getDeleted, search} = require('../contollers/productControllers')
+const { createProduct , updateProduct , deleteProduct , getProduct , getProducts , getAllDeleted, search, getAllActive} = require('../contollers/productControllers')
+productRouter.get('/' , getProducts)
 productRouter.post('/create' , createProduct)
 productRouter.put('/update/:productId' , updateProduct)
 productRouter.put('/delete/:productId' , deleteProduct)
-productRouter.get('/' , getProducts)
-productRouter.get('/product/:productId' , getProduct)
+productRouter.post('/product/:productId' , getProduct)
+productRouter.post('/product/deleted' , getAllDeleted)
+productRouter.post('/product/accepted' , getAllActive)
 productRouter.get('/search' , search)
+
 
 module.exports = productRouter

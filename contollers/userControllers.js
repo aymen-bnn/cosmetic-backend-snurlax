@@ -95,8 +95,6 @@ const profile = async (req , res) => {
           console.log({ message: 'Invalid token.' });
           return res.status(401).json({ message: 'Invalid token.' });
         }
-    
-        console.log({ user });
         res.status(200).json({user})
       });
 }
@@ -123,7 +121,7 @@ const accept = async (req , res) => {
         const user = await User.findOne({_id : userId})
         user.active = true 
         user.save()
-        res.status(200).json({user})
+        res.status(200).json({ message : "user accepted",user})
     })
     } catch (error) {
         res.status(400).json({error})
@@ -143,7 +141,7 @@ const refuse = async (req , res) => {
         const user = await User.findOne({_id : userId})
         user.active = false 
         user.save()
-        res.status(200).json({user})
+        res.status(200).json({ message : "user refused", user})
     })
     } catch (error) {
         res.status(400).json({error})
@@ -161,4 +159,43 @@ const upload = async (req, res) => {
 
     res.status(200).json(uploadedFiles)
 }
-module.exports = { register, login , profile , logout , accept , refuse , upload}
+
+const changePassword = async (req , res) => {
+
+    const {password , newPassword , confirmNewPassword} = req.body
+    const {token} = req.headers
+
+    try {
+        jwt.verify(token , process.env.JWT_TOKEN_KEY , async (err , data) => {
+            const user = await User.findOne({ email: data.user.email })
+            if(!user){
+                return res.status(400).json({error : "user doesn't exist"})
+            }
+
+            if(newPassword !== confirmNewPassword){
+                return res.status(400).json({error : "password and confirmed password must be identical"})
+            }
+            const isValidPassword = bcrypt.compareSync(password , user.password)
+
+            if(!isValidPassword){
+                return res.status(400).json({error : "password is wrong"})
+            }
+
+            if(!validator.isStrongPassword(newPassword)){
+                return res.status(400).json({error : "password must be strong"})
+            }
+
+            const hashPassword = await bcrypt.hash(newPassword , 10)
+
+            user.password = hashPassword
+            await user.save()
+
+            res.status(200).json({ message : "password is changed ",user})
+
+            
+        })
+    } catch (error) {
+        res.status(400).json({error})
+    }
+}
+module.exports = { register, login , profile , logout , accept , refuse , upload , changePassword}

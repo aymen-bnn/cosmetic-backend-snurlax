@@ -32,8 +32,14 @@ const userSchema = new Schema ({
     isAdmin : {
         type : Boolean ,
         default : false
-    }
-
+    } ,
+    favorites: {
+        type: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product'
+        }],
+        default: []
+      }
 })
 
 module.exports = mongoose.model('User' , userSchema)
