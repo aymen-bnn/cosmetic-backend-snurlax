@@ -245,7 +245,7 @@ const getProductByCategoryUsers = async (req, res) => {
       if (!user.active) {
         return res.status(400).json({ error: "authoristaion error" })
       }
-      const products = await Product.find({ category: { $in: [categoryId] }, state: "active", owner: user._id })
+      const products = await Product.find({ category: { $in: [categoryId] }, state: "active"})
       .populate('category')
       .exec();
       res.status(200).json({products})
