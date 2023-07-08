@@ -210,7 +210,7 @@ const getAllDeleted = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error });
   }
-};
+}
 
 const getAllActive = async (req, res) => {
   const { token } = req.headers
@@ -245,8 +245,10 @@ const getProductByCategoryUsers = async (req, res) => {
       if (!user.active) {
         return res.status(400).json({ error: "authoristaion error" })
       }
-      const products = await Product.find({ category: { $in: [categoryId] }, state: "active", isAdmin: false }).populate('category');
-      res.json(products);
+      const products = await Product.find({ category: { $in: [categoryId] }, state: "active", owner: user._id })
+      .populate('category')
+      .exec();
+      res.status(200).json({products})
     })
   } catch (error) {
     res.status(400).json({ error })

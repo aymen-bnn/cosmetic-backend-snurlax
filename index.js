@@ -22,6 +22,7 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const multerMiddleware = multer({dest : 'uploads'})
+app.use(express.urlencoded({extended: true}))
 
 //app.use(verifyToken)
 
