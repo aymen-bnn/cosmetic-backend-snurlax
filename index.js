@@ -41,5 +41,4 @@ mongoose.connect(process.env.MONGO_URL)
     app.listen(PORT , () => {
         console.log(`listening on port ${PORT}`)
     })
-})
-.catch((err)=>{console.log(err)})
+}).catch((err)=>{console.log(err)})
