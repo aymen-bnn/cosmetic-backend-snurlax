@@ -269,8 +269,10 @@ const getProductByCategoryAdmins = async (req, res) => {
       if (!user.isAdmin) {
         return res.status(400).json({ error: "authoristaion error" })
       }
-      const products = await Product.find({ category: { $in: [categoryId] } }).populate('category');
-      res.json(products);
+      const products = await Product.find({ category: { $in: [categoryId] }})
+      .populate('category')
+      .exec();
+      res.status(200).json({products})
     })
   } catch (error) {
     res.status(400).json({ error })
