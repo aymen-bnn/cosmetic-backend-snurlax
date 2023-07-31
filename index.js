@@ -16,6 +16,7 @@ const purchaseRouter = require('./routes/purchaseRoutes')
 const {upload} = require ('./contollers/userControllers')
 const categoryRouter = require('./routes/categoryRoutes')
 const favouriteRouter = require('./routes/favouriteRoutes')
+const cartRouter = require('./routes/cartRoutes')
 
 //middleware
 app.use(express.json())
@@ -30,9 +31,10 @@ app.use(express.urlencoded({extended: true}))
 //routes
 app.use('/users' , userRouter)
 app.use('/products' , productRouter)
-app.use('/purchases' , purchaseRouter)
+app.use('/purchase' , purchaseRouter)
 app.use('/category' , categoryRouter)
 app.use('/favourites' , favouriteRouter)
+app.use('/cart' , cartRouter)
 app.post('/upload' ,multerMiddleware.array('photos', 100) , upload)
 
 //connecting to the database and initialising the app 

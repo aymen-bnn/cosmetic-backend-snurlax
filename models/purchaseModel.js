@@ -9,7 +9,7 @@ const purchaseModel = new Schema({
         required : true
     },
     items : [{
-        id : {
+        product : {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product'
         },
