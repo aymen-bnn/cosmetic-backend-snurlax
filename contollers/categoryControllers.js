@@ -42,6 +42,7 @@ const deleteCategory = async (req, res) => {
             if (!admin.isAdmin) {
                 return res.status(400).json({ error: " authorisation error" })
             }
+            //delete category from 
             const deletedCategory = await Category.findByIdAndDelete(category._id)
             res.status(200).json({ message: "category deleted successfully", deletedCategory })
     
@@ -54,7 +55,7 @@ const deleteCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
     const {categoryId} = req.params 
-    const { name, image , owner } = req.body
+    const { name, image } = req.body
     const { token } = req.headers
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
@@ -85,16 +86,21 @@ const updateCategory = async (req, res) => {
 }
 
 const getCategory = async (req, res) => {
-
     const {categoryId} = req.params
-
+    const {token} = req.headers
     try {
+        jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+        const user = await User.findOne({email : data.user.email})
+        if(!user){
+            return res.status(400).json({error : "user doesnt exist"})
+        }
         const category = await Category.findById(categoryId)
         if(!category){
             return res.status(400).json({error : "category does not exist"})
         }
 
         res.status(200).json({category})
+    })
     } catch (error) {
         
     }
@@ -102,8 +108,19 @@ const getCategory = async (req, res) => {
 
 const getCategories = async (req, res) => {
 
-    const categories = await Category.find({})
-    res.status(400).json({categories})
+    const {token} = req.headers
+    try {
+        jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            const user = await User.findOne({email : data.user.email})
+            if(!user){
+                return res.status(400).json({error : "user doesnt exist"})
+            }
+            const categories = await Category.find({})
+            res.status(400).json({categories})
+        })
+    } catch (error) {
+        
+    }
 }
 
 module.exports = { createCategory, updateCategory, deleteCategory, getCategory, getCategories }

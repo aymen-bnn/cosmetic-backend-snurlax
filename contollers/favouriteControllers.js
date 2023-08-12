@@ -1,6 +1,7 @@
 
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
+const jwt = require('jsonwebtoken')
 const addFavourite = async (req, res) => {
 
     const { token } = req.headers

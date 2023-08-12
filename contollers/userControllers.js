@@ -147,6 +147,63 @@ const refuse = async (req , res) => {
         res.status(400).json({error})
     }
 }
+const getNotActiveUsers = async (req , res) => {
+    const { token } = req.headers
+    try {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+        console.log(data)
+        const admin = await User.findOne({ email: data.user.email })
+       
+        if (!admin.isAdmin) {
+            return res.status(400).json({ error: " authorisation error" })
+        }
+        const user = await User.find({active : false})
+
+        res.status(200).json({user})
+    })
+    } catch (error) {
+        res.status(400).json({error})
+    }
+}
+const getActiveUsers = async (req , res) => {
+
+    const { token } = req.headers
+    try {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+        console.log(data)
+        const admin = await User.findOne({ email: data.user.email })
+       
+        if (!admin.isAdmin) {
+            return res.status(400).json({ error: " authorisation error" })
+        }
+        const users = await User.find({active : true})
+
+        res.status(200).json({users})
+    })
+    } catch (error) {
+        res.status(400).json({error})
+    }
+}
+const getAllUsers = async (req , res) => {
+
+    const { token } = req.headers
+    try {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+        console.log(data)
+        const admin = await User.findOne({ email: data.user.email })
+       
+        if (!admin.isAdmin) {
+            return res.status(400).json({ error: " authorisation error" })
+        }
+        const user = await User.find({})
+
+        res.status(200).json({user})
+    })
+    } catch (error) {
+        res.status(400).json({error})
+    }
+}
+
 const upload = async (req, res) => {
     const uploadedFiles = []
     for (let i = 0; i < req.files.length; i++) {
@@ -198,4 +255,4 @@ const changePassword = async (req , res) => {
         res.status(400).json({error})
     }
 }
-module.exports = { register, login , profile , logout , accept , refuse , upload , changePassword}
+module.exports = { register, login , profile , logout , accept , refuse , upload , changePassword , getActiveUsers , getNotActiveUsers, getAllUsers }

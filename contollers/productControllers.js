@@ -188,6 +188,18 @@ const getProducts = async (req, res) => {
     res.status(400).json({ error })
   }
 }
+const getProductsAdmin = async (req, res) => {
+
+
+  try {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+    const product = await Product.find({})
+    res.status(200).json({ product })
+    })
+  } catch (error) {
+    res.status(400).json({ error })
+  }
+}
 
 const getAllDeleted = async (req, res) => {
   const { token } = req.headers
@@ -311,5 +323,6 @@ module.exports = {
   getAllActive,
   search,
   getProductByCategoryUsers,
-  getProductByCategoryAdmins
+  getProductByCategoryAdmins,
+  getProductsAdmin
 }

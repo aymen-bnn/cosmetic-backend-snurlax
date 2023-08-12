@@ -1,15 +1,17 @@
 
 const productRouter = require('express').Router()
-const { createProduct , updateProduct , deleteProduct , getProduct , getProducts , getAllDeleted, search, getAllActive, getProductByCategoryUsers, getProductByCategoryAdmins} = require('../contollers/productControllers')
+const { createProduct , updateProduct , deleteProduct , getProduct , getProducts , getAllDeleted, search, getAllActive, getProductByCategoryUsers, getProductByCategoryAdmins , getProductsAdmin} = require('../contollers/productControllers')
 productRouter.get('/' , getProducts)
+productRouter.get('/getAll' , getProductsAdmin)
+//admin 
 productRouter.post('/create' , createProduct)
-productRouter.put('/update/:productId' , updateProduct)
-productRouter.put('/delete/:productId' , deleteProduct)
+productRouter.post('/update/:productId' , updateProduct)
+productRouter.post('/delete/:productId' , deleteProduct)
 productRouter.post('/product/:productId' , getProduct)
-productRouter.post('/product/deleted' , getAllDeleted)
-productRouter.post('/product/accepted' , getAllActive)
-productRouter.post('/user/product/category/:categoryId' , getProductByCategoryUsers)
-productRouter.post('/admin/product/category/:categoryId' , getProductByCategoryAdmins)
+productRouter.get('/product/deleted' , getAllDeleted)
+productRouter.get('/product/accepted' , getAllActive)
+productRouter.get('/product/user/category/:categoryId' , getProductByCategoryUsers)
+productRouter.get('/product/user/category/:categoryId' , getProductByCategoryAdmins)
 productRouter.get('/search' , search)
 
 
