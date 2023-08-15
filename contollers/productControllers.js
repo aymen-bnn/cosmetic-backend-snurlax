@@ -190,9 +190,15 @@ const getProducts = async (req, res) => {
 }
 const getProductsAdmin = async (req, res) => {
 
-
+  const {token} = req.headers
   try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      const admin = await User.findOne({ email: data.user.email })
+      //check if the user is admin 
+      if (!admin.isAdmin) {
+        return res.status(400).json({ error: " authorisation error" })
+      }
+
     const product = await Product.find({})
     res.status(200).json({ product })
     })
