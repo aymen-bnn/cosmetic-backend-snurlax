@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/userModel')
 const Category = require('../models/categoryModel')
-
+const Product = require('../models/productModel')
 const createCategory = async (req, res) => {
     const { name, image } = req.body
     const { token } = req.headers
@@ -27,31 +27,38 @@ const createCategory = async (req, res) => {
 }
 
 const deleteCategory = async (req, res) => {
+    const { categoryId } = req.params;
+    const { token } = req.headers;
 
-    const {categoryId} = req.params 
-    const { token } = req.headers
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
-
-            const category = await Category.findById(categoryId)
-            if(!category){
-                return res.status(400).json({error : "category doesn't exist"})
+            if (err) {
+                return res.status(401).json({ error: "Unauthorized" });
             }
-           
-            const admin = await User.findOne({ email: data.user.email })
+
+            const category = await Category.findById(categoryId);
+            if (!category) {
+                return res.status(400).json({ error: "Category doesn't exist" });
+            }
+
+            const admin = await User.findOne({ email: data.user.email });
             if (!admin.isAdmin) {
-                return res.status(400).json({ error: " authorisation error" })
+                return res.status(400).json({ error: "Authorization error" });
             }
-            //delete category from 
-            const deletedCategory = await Category.findByIdAndDelete(category._id)
-            res.status(200).json({ message: "category deleted successfully", deletedCategory })
-    
-        })
-    } catch (error) {
-        
-    }
 
-}
+            
+            await Product.updateMany(
+                { category: category._id },
+                { $pull: { category: category._id } }
+            );
+
+            const deletedCategory = await Category.findByIdAndDelete(category._id);
+            res.status(200).json({ message: "Category deleted successfully", deletedCategory });
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
 
 const updateCategory = async (req, res) => {
     const {categoryId} = req.params 

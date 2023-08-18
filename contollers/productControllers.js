@@ -136,7 +136,7 @@ const deleteProduct = async (req, res) => {
         return res.status(400).json({ error: " authorisation error" })
       }
 
-      const product = await Product.findById(productId)
+      const product = await Product.findById(productId).populate('category');
 
       if (!product) {
         return res.status(404).json({ error: 'Product not found' });
@@ -162,9 +162,9 @@ const getProduct = async (req, res) => {
       let product
 
       if (user.isAdmin) {
-        product = await Product.findById(productId)
+        product = await Product.findById(productId).populate('category');
       } else {
-        product = await Product.findOne({ _id: productId, state: "active" });
+        product = await Product.findOne({ _id: productId, state: "active" }).populate('category');
       }
 
       if (!product) {
@@ -182,7 +182,7 @@ const getProducts = async (req, res) => {
 
 
   try {
-    const product = await Product.find({ state: "active" })
+    const product = await Product.find({ state: "active" }).populate('category');
     res.status(200).json({ product })
   } catch (error) {
     res.status(400).json({ error })
@@ -199,7 +199,7 @@ const getProductsAdmin = async (req, res) => {
         return res.status(400).json({ error: " authorisation error" })
       }
 
-    const product = await Product.find({})
+    const product = await Product.find({}).populate('category');
     res.status(200).json({ product })
     })
   } catch (error) {
@@ -222,7 +222,7 @@ const getAllDeleted = async (req, res) => {
         return res.status(400).json({ error: 'Authorization error' });
       }
 
-      const product = await Product.find({ state: 'archived' });
+      const product = await Product.find({ state: 'archived' }).populate('category');
       res.status(200).json({ product });
     });
   } catch (error) {
@@ -241,7 +241,7 @@ const getAllActive = async (req, res) => {
         return res.status(400).json({ error: " authorisation error" })
       }
 
-      const product = await Product.find({})
+      const product = await Product.find({}).populate('category');
       res.status(200).json({ product })
     })
   } catch (error) {
@@ -312,7 +312,7 @@ const search = async (req, res) => {
           ]
         }
       ]
-    });
+    }).populate('category');
 
     res.status(200).json({ products });
   } catch (error) {

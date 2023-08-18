@@ -3,6 +3,8 @@ const User = require('../models/userModel')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const fs = require('fs');
+
 const register = async (req, res) => {
     try {
         const { fullName, username, email, password, phone, confirmedPassword } = req.body
