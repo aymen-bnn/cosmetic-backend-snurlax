@@ -60,6 +60,9 @@ const removeAllItemsFromCart = async (req, res) => {
   const {token} = req.headers
   try {
     await jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       const user = await User.findOne({ email: data.user.email })
       const cart = await Cart.findOne({ userId: user._id })
     if (!cart) {

@@ -10,6 +10,9 @@ const createProduct = async (req, res) => {
 
   try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       if (!name || !price || !images || !description) {
         return res.status(400).json({ error: "name, price, images, quantity are required" });
       }
@@ -69,6 +72,9 @@ const updateProduct = async (req, res) => {
 
   try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       if (!name || !price || !images || !description) {
         return res.status(400).json({ error: "name, price, images, quantity are required" });
       }
@@ -128,7 +134,10 @@ const deleteProduct = async (req, res) => {
   const { productId } = req.params
   const { token } = req.headers
   try {
-    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       console.log(data)
       const admin = await User.findOne({ email: data.user.email })
       //check if the user is admin 
@@ -154,7 +163,10 @@ const getProduct = async (req, res) => {
   const { productId } = req.params
   const { token } = req.headers
   try {
-    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       console.log(data)
       const user = await User.findOne({ email: data.user.email })
 
@@ -193,6 +205,9 @@ const getProductsAdmin = async (req, res) => {
   const {token} = req.headers
   try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       const admin = await User.findOne({ email: data.user.email })
       //check if the user is admin 
       if (!admin.isAdmin) {
@@ -211,10 +226,10 @@ const getAllDeleted = async (req, res) => {
   const { token } = req.headers
 
   try {
-    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
-      if (error) {
-        return res.status(400).json({ error: 'authorisation error' });
-      }
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       console.log(data);
       const admin = await User.findOne({ email: data.user.email });
       // check if the user is admin
@@ -233,7 +248,10 @@ const getAllDeleted = async (req, res) => {
 const getAllActive = async (req, res) => {
   const { token } = req.headers
   try {
-    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       console.log(data)
       const admin = await User.findOne({ email: data.user.email })
       //check if the user is admin 
@@ -256,6 +274,9 @@ const getProductByCategoryUsers = async (req, res) => {
 
   try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       const user = await User.findOne({ email: data.user.email })
       if (!user) {
         return res.status(400).json({ error: "user is not found" })
@@ -280,6 +301,9 @@ const getProductByCategoryAdmins = async (req, res) => {
 
   try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
       const user = await User.findOne({ email: data.user.email })
       if (!user) {
         return res.status(400).json({ error: "user is not found" })

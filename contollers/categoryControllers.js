@@ -9,6 +9,9 @@ const createCategory = async (req, res) => {
 
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             if(!name || !image){
                 return res.status(400).json({error : "all fields are required"})
             }
@@ -66,6 +69,9 @@ const updateCategory = async (req, res) => {
     const { token } = req.headers
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
 
             const category = await Category.findById(categoryId)
             if(!category){
@@ -97,6 +103,9 @@ const getCategory = async (req, res) => {
     const {token} = req.headers
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
         const user = await User.findOne({email : data.user.email})
         if(!user){
             return res.status(400).json({error : "user doesnt exist"})
@@ -118,6 +127,9 @@ const getCategories = async (req, res) => {
     const {token} = req.headers
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             const user = await User.findOne({email : data.user.email})
             if(!user){
                 return res.status(400).json({error : "user doesnt exist"})

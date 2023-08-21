@@ -77,7 +77,7 @@ const login = async (req, res) => {
         }
 
 
-        const token = await jwt.sign({ user }, process.env.JWT_TOKEN_KEY, { expiresIn: '7d' })
+        const token = await jwt.sign({ user }, process.env.JWT_TOKEN_KEY, { expiresIn: '365d' })
         res.status(200).json({ user, token })
     } catch (error) {
         console.log(error)
@@ -114,6 +114,9 @@ const accept = async (req , res) => {
     const { token } = req.headers
     try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+        if (err) {
+            return res.status(400).json({ error: "Invalid token" });
+        }
 
         const admin = await User.findOne({ email: data.user.email })
         //check if the user is admin 
@@ -134,6 +137,9 @@ const refuse = async (req , res) => {
     const { token } = req.headers
     try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+        if (err) {
+            return res.status(400).json({ error: "Invalid token" });
+        }
         console.log(data)
         const admin = await User.findOne({ email: data.user.email })
         //check if the user is admin 
@@ -153,6 +159,9 @@ const getNotActiveUsers = async (req , res) => {
     const { token } = req.headers
     try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+        if (err) {
+            return res.status(400).json({ error: "Invalid token" });
+        }
         console.log(data)
         const admin = await User.findOne({ email: data.user.email })
        
@@ -172,6 +181,9 @@ const getActiveUsers = async (req , res) => {
     const { token } = req.headers
     try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+        if (err) {
+            return res.status(400).json({ error: "Invalid token" });
+        }
         console.log(data)
         const admin = await User.findOne({ email: data.user.email })
        
@@ -191,6 +203,9 @@ const getAllUsers = async (req , res) => {
     const { token } = req.headers
     try {
     jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+        if (err) {
+            return res.status(400).json({ error: "Invalid token" });
+        }
         console.log(data)
         const admin = await User.findOne({ email: data.user.email })
        
@@ -226,6 +241,9 @@ const changePassword = async (req , res) => {
 
     try {
         jwt.verify(token , process.env.JWT_TOKEN_KEY , async (err , data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             const user = await User.findOne({ email: data.user.email })
             if(!user){
                 return res.status(400).json({error : "user doesn't exist"})

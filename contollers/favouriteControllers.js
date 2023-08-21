@@ -9,6 +9,9 @@ const addFavourite = async (req, res) => {
 
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             const user = await User.findOne({ email: data.user.email })
             if (!user.active) {
                 return res.status(400).json({ error: "user is not active" })
@@ -32,6 +35,9 @@ const deleteFavourite = async (req, res) => {
 
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             const user = await User.findOne({ email: data.user.email })
             if (!user.active) {
                 return res.status(400).json({ error: "user is not active" })
@@ -52,6 +58,9 @@ const deleteFavourites = async (req, res) => {
     const { token } = req.headers
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             const user = await User.findOne({ email: data.user.email })
             if (!user.active) {
                 return res.status(400).json({ error: "user is not active" })
@@ -73,6 +82,9 @@ const getFavourites = async (req, res) => {
   
     try {
       jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+        if (err) {
+            return res.status(400).json({ error: "Invalid token" });
+        }
         const user = await User.findOne({ email: data.user.email }).populate('favorites');
   
         if (!user.active) {

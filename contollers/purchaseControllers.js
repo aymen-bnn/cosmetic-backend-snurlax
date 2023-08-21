@@ -35,9 +35,8 @@ const create = async (req, res) => {
                 }
                 totalPrice += product.price * cartItem.quantity;
             }
-            totalPrice += additionalValue; // Add the additional cost to the total price
-
-            // Create a new purchase object based on the model
+            totalPrice += additionalValue; 
+            
             const purchase = await Purchase.create({
                 purchaser: user._id,
                 items: cart.items,
@@ -57,6 +56,9 @@ const accept = async (req, res) => {
     const { token } = req.headers
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             const admin = await User.findOne({ email: data.user.email })
             if (!admin.isAdmin) {
                 return res.status(400).json({ error: " authorisation error" })
@@ -81,6 +83,9 @@ const refuse = async (req, res) => {
     const { token } = req.headers
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             const admin = await User.findOne({ email: data.user.email })
             if (!admin.isAdmin) {
                 return res.status(400).json({ error: " authorisation error" })
@@ -104,6 +109,9 @@ const getAllpurchases = async (req, res) => {
     const { token } = req.headers
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             const admin = await User.findOne({ email: data.user.email })
             if (!admin.isAdmin) {
                 return res.status(400).json({ error: " authorisation error" })
@@ -122,6 +130,9 @@ const getPurchases = async (req, res) => {
 
     try {
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
             const user = await User.findOne({ email: data.user.email })
             const purchases = await Purchase.find({ purchaser: user._id })
 
