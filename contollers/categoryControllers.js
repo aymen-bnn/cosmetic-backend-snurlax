@@ -135,7 +135,7 @@ const getCategories = async (req, res) => {
                 return res.status(400).json({error : "user doesnt exist"})
             }
             const categories = await Category.find({})
-            res.status(400).json({categories})
+            res.status(200).json({categories})
         })
     } catch (error) {
         
