@@ -67,7 +67,7 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { productId } = req.params;
-  const { name, price, images, description, quantity, value, unit, volume, brand, categories } = req.body;
+  const { name, price, images, description, state, value, unit, volume, brand, categories } = req.body;
   const { token } = req.headers;
 
   try {
@@ -112,7 +112,8 @@ const updateProduct = async (req, res) => {
             volume
           },
           brand,
-          category: categoryIds
+          category: categoryIds,
+          state
         },
         { new: true }
       );
