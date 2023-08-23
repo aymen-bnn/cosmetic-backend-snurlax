@@ -113,7 +113,7 @@ const accept = async (req , res) => {
     const {userId} = req.params
     const { token } = req.headers
     try {
-    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
         if (err) {
             return res.status(400).json({ error: "Invalid token" });
         }
@@ -136,7 +136,7 @@ const refuse = async (req , res) => {
     const {userId} = req.params
     const { token } = req.headers
     try {
-    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
         if (err) {
             return res.status(400).json({ error: "Invalid token" });
         }
@@ -180,7 +180,7 @@ const getActiveUsers = async (req , res) => {
 
     const { token } = req.headers
     try {
-    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
         if (err) {
             return res.status(400).json({ error: "Invalid token" });
         }
@@ -202,7 +202,7 @@ const getAllUsers = async (req , res) => {
 
     const { token } = req.headers
     try {
-    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
         if (err) {
             return res.status(400).json({ error: "Invalid token" });
         }
