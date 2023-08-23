@@ -149,4 +149,30 @@ const getPurchases = async (req, res) => {
     }
 
 }
-module.exports = { create, accept, refuse, getAllpurchases, getPurchases }
+
+const getPurchase = async (req , res) =>{
+
+    const {purchaseId} = req.params
+    const {token} = req.headers
+
+    try {
+        jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
+            const admin = await User.findOne({ email: data.user.email })
+            if (!admin.isAdmin) {
+                return res.status(400).json({ error: " authorisation error" })
+            }
+            const purchase = await Purchase.findOne({_id : purchaseId}).populate({path : 'purchaser' , select: 'fullName email phone'})
+            if(!purchase){
+                return res.status(400).json({error : "no purchase exist"})
+            }
+            res.status(200).json({purchase})
+        })
+        
+    } catch (error) {
+        
+    }
+}
+module.exports = { create, accept, refuse, getAllpurchases, getPurchases , getPurchase }

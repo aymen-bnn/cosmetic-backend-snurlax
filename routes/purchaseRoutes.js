@@ -4,12 +4,14 @@ const { create,
     accept,
     refuse,
     getAllpurchases,
-    getPurchases } = require('../contollers/purchaseControllers')
+    getPurchases, 
+    getPurchase} = require('../contollers/purchaseControllers')
 
 purchaseRouter.post('/create', create)
 purchaseRouter.put('/accept/:purchaseId', accept)
 purchaseRouter.put('/refuse/:purchaseId', refuse)
-purchaseRouter.post('/getAll', getAllpurchases)
-purchaseRouter.post('/get', getPurchases)
+purchaseRouter.get('/get/:purchaseId', getPurchase)
+purchaseRouter.get('/get', getPurchases)
+purchaseRouter.get('/getAll', getAllpurchases)
 
 module.exports = purchaseRouter
