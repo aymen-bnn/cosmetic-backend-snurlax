@@ -158,7 +158,7 @@ const refuse = async (req , res) => {
 const getNotActiveUsers = async (req , res) => {
     const { token } = req.headers
     try {
-    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (error, data) => {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
         if (err) {
             return res.status(400).json({ error: "Invalid token" });
         }
