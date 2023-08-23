@@ -116,7 +116,10 @@ const getAllpurchases = async (req, res) => {
             if (!admin.isAdmin) {
                 return res.status(400).json({ error: " authorisation error" })
             }
-            const purchases = await Purchase.find({})
+            const purchases = await Purchase.find({}).populate({
+                path: 'items.product',
+                select: 'name price quantity',
+            });
             res.status(200).json({ purchases })
         })
     } catch (error) {
@@ -134,7 +137,10 @@ const getPurchases = async (req, res) => {
                 return res.status(400).json({ error: "Invalid token" });
             }
             const user = await User.findOne({ email: data.user.email })
-            const purchases = await Purchase.find({ purchaser: user._id })
+            const purchases = await Purchase.find({ purchaser: user._id }).populate({
+                path: 'items.product',
+                select: 'name price quantity',
+            });
 
             res.status(200).json({ purchases })
         })
