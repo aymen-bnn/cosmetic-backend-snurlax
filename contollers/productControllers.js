@@ -323,26 +323,55 @@ const getProductByCategoryAdmins = async (req, res) => {
 //search?query=example
 const search = async (req, res) => {
   const { query } = req.query;
-
+  const {token} = req.headers
+  
   try {
-    const products = await Product.find({
-      $and: [
-        { state: "active" },
-        {
+
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+      }
+
+      const user = await User.findOne({ email: data.user.email });
+
+      if (!user) {
+        return res.status(400).json({ error: "User not found" });
+      }
+
+      let products;
+
+      if (user.isAdmin) {
+        
+        products = await Product.find({
           $or: [
             { name: { $regex: query, $options: "i" } },
             { description: { $regex: query, $options: "i" } },
-            { brand: { $regex: query, $options: "i" } }
-          ]
-        }
-      ]
-    }).populate('category');
+            { brand: { $regex: query, $options: "i" } },
+          ],
+        }).populate("category");
+      } else {
+        
+        products = await Product.find({
+          $and: [
+            { state: "active" },
+            {
+              $or: [
+                { name: { $regex: query, $options: "i" } },
+                { description: { $regex: query, $options: "i" } },
+                { brand: { $regex: query, $options: "i" } },
+              ],
+            },
+          ],
+        }).populate("category")
+      }
 
-    res.status(200).json({ products });
+      res.status(200).json({ products })
+    });
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(400).json({ error: error.message });
   }
 }
+
 module.exports = {
   createProduct,
   updateProduct,
