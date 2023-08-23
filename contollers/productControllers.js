@@ -97,7 +97,6 @@ const updateProduct = async (req, res) => {
         categoryIds.push(foundCategory._id);
       }
 
-      console.log("categoryIds:", categoryIds);
 
       const updatedProduct = await Product.findOneAndUpdate(
         { _id: productId, owner: admin._id },

@@ -119,7 +119,7 @@ const getAllpurchases = async (req, res) => {
             const purchases = await Purchase.find({}).populate({
                 path: 'items.product',
                 select: 'name price quantity',
-            });
+            }).populate({path : 'purchaser' , select: 'fullName email phone'});
             res.status(200).json({ purchases })
         })
     } catch (error) {
