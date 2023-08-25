@@ -79,34 +79,44 @@ const deleteFavourites = async (req, res) => {
 }
 const getFavourites = async (req, res) => {
     const { token } = req.headers;
-  
+
     try {
-      jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
-        if (err) {
-            return res.status(400).json({ error: "Invalid token" });
-        }
-        const user = await User.findOne({ email: data.user.email }).populate('favorites');
-  
-        if (!user.active) {
-          return res.status(400).json({ error: "user is not active" });
-        }
-  
-        const allFavourites = user.favorites.map(favourite => ({
-          name: favourite.name,
-          price: favourite.price,
-          images: favourite.images,
-          description: favourite.description,
-          quantity: favourite.quantity,
-          volume: favourite.volume,
-          brand: favourite.brand,
-          category: favourite.category,
-          state: favourite.state
-        }));
-  
-        res.status(200).json({ favourites: allFavourites });
-      });
+        jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+            if (err) {
+                return res.status(400).json({ error: "Invalid token" });
+            }
+            const user = await User.findOne({ email: data.user.email }).populate({
+                path: 'favorites',
+                populate: {
+                    path: 'category',
+                    model: 'Category'
+                }
+            });
+            
+            if (!user.active) {
+                return res.status(400).json({ error: "user is not active" });
+            }
+
+            const allFavourites = user.favorites.map(favourite => ({
+                _id : favourite._id,
+                owner : favourite.owner,
+                name: favourite.name,
+                price: favourite.price,
+                images: favourite.images,
+                description: favourite.description,
+                quantity: favourite.quantity,
+                volume: favourite.volume,
+                brand: favourite.brand,
+                category: favourite.category,
+                state: favourite.state,
+                createdAt : favourite.createdAt,
+                updatedAt : favourite.updatedAt
+            }));
+
+            res.status(200).json({ favourites: allFavourites });
+        });
     } catch (error) {
-      res.status(400).json({ error });
+        res.status(400).json({ error });
     }
-  };
+};
 module.exports = { addFavourite, deleteFavourite, deleteFavourites , getFavourites}
