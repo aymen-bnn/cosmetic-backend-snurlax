@@ -21,7 +21,7 @@ const addFavourite = async (req, res) => {
                 { $addToSet: { favorites: favourite } },
                 { new: true }
             )
-            res.status(400).json({message : "favourite added" , updatedUser})
+            res.status(200).json({message : "favourite added" , updatedUser})
         })
     } catch (error) {
         res.status(400).json({ error })
@@ -47,7 +47,7 @@ const deleteFavourite = async (req, res) => {
                 { $pull: { favorites: favourite } },
                 { new: true }
             )
-            res.status(400).json({message : "favourite removed" , updatedUser})
+            res.status(200).json({message : "favourite removed" , updatedUser})
         })
     } catch (error) {
         res.status(400).json({ error })
@@ -70,7 +70,7 @@ const deleteFavourites = async (req, res) => {
                 { favorites:[] },
                 { new: true }
             )
-            res.status(400).json({message : "favourite removed" , updatedUser})
+            res.status(200).json({message : "favourite removed" , updatedUser})
         })
     } catch (error) {
         res.status(400).json({ error })
