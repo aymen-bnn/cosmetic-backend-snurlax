@@ -2,44 +2,48 @@ const mongoose = require('mongoose')
 
 const Schema = require('mongoose').Schema
 
-const userSchema = new Schema ({
+const userSchema = new Schema({
 
-    email : {
-        type : String, 
-        required : true
-    } ,
+    email: {
+        type: String,
+        required: true
+    },
 
-    password : {
-        type : String , 
-        required : true
-    } ,
-    username : {
-        type : String , 
-        required : true
-    } ,
-    fullName : {
-        type : String , 
-        required : true
-    } ,
-    phone : {
-        type : String , 
-        required : true
+    password: {
+        type: String,
+        required: true
     },
-    active : {
-        type : Boolean ,
-        default : false
+    username: {
+        type: String,
+        required: true
     },
-    isAdmin : {
-        type : Boolean ,
-        default : false
-    } ,
+    fullName: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    active: {
+        type: Boolean,
+        default: false
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
     favorites: {
         type: [{
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
         }],
         default: []
-      }
+    },
+    codeVerification: {
+        type: Number , 
+        default : null
+    }
 })
 
-module.exports = mongoose.model('User' , userSchema)
+module.exports = mongoose.model('User', userSchema)
