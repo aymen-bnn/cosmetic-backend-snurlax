@@ -99,7 +99,7 @@ const updateProduct = async (req, res) => {
 
 
       const updatedProduct = await Product.findOneAndUpdate(
-        { _id: productId, owner: admin._id },
+        { _id: productId},
         {
           name,
           price,

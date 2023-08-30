@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "cosmetic-messaging",
+  "private_key_id": "fe55328a04869e324d4f3634a0bd545a3f5a08b0",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCmTJza3xi9ne2k\neJsltYs6XyB8FOwM9GRV75OXiNyLX68X8gW0+Grqbcuhadf2/JcpSVTbKGZ/JH5U\n8NE9K1C7/RSmfTANOdWnh6ii45JSQwV9cHKoB1ptvcmqT8ypgW09iMtJ4cd8P6XB\njexjvo/pOEnNFBMKVwqBvB3okCpqV7FzskEQZU/9GW3VRcc00ljvJPGFpnG3wLpu\nWBV51QnEgVqnrJp/wlvEQZ50bXsOZvnJLNXBQY73r4b0BnCUgBMOuflEmaRpktN0\nUFS/kc5gTUI4PdFPbsm9jmjbRad5o5URzxb8FyHin5Y+HT8Rug+/xIZlW5HXUAZy\nM6TtZcwjAgMBAAECggEAAKnvOY08BnKKIrOIiwH9tRUkIA3e7PGDMdFrzJlzQYTE\nQig19Z74OxW56Y8IM0HKDxQhdPtLgKTSP3lZz6pLzDRNnMyEui8wHYpHfHIqgPTB\n7nPaDhzZZsHwyCLbAkiaxjm0wtRWSel6U+d17IAAoXTkEB/myfSTyijIePrHI8Ps\nMJdI1iZVdYk764t1iyGrV+7iWEdBbX81zhm+H/Uq0hBWvciBv1VxeKqCFr2PxTNh\nMK2IBGUNssrLXBtEyrjbVI3ib7xh+fp0DxVCiD81I9FVysYF1XKXv/dQNisPPCA3\njStBQbBHraOvAgska9J5mt3j9MPpwr27erOrjc7LIQKBgQDlMamF/VFq22+JZZjF\nNgyesP4mZIR/CAC0a1UlGMFC8RYzI4iFEa/KbjY6pNMjAy8erybLORJrGAmzUToA\n5Miu4xlHTWmR24zZB5eIt9FUaYGHOFkuhzD3EMQDbZfzKmwHHJoerQG6a2iRQUI8\nlmnPida2vbFbkkrij/AXW+w2ZwKBgQC5v873hJ+hJhLwMzgT0JH8AHkdXjJI2Wat\nDBDPZnedTZY1GNcJ18UO4WqNpat1cEIKzPy/1v1WIO1Pn3GGyklYnL0VXuZfUInb\nLAS4jLQot08+aouTpJg/Vs7rano6MgERsLL83aD75jmEeMtJ9CxoY9RYaGFIBuLe\nkOT3YDSO5QKBgQCY+D16FWmq1UyrOmjtbzabD+yA+WPJWTEHOf/5I32RzVEQzq2G\nixh2FnsRRwM4gh6H70UILE5TthZ7XUJGaGxc9WvgwBUu6YcnLz7/XBhVq5ltA7na\nKRcQP1tkIlhhTrYNRRTEVpoprxh6okCwKX/zqb7p9s+SG6DpeEI5hPuyDwKBgQCH\nHuq1z7o3hfTc2sV+VIj9onJ4VJ+LsuooE9DerpFw0pHkCi/TryxgSMY0SEHT6leA\nd+GcxA4B6232L+xruxdj6JD7zM8UowfFcd31ShV8UOzKYMMsId3GpaVcR1amot14\nOuvZWnfTBoTswtpO79qmDYjYzwWFWc0LTqfg9BEHqQKBgEuTisTFLtoxuE8Wzda5\n3xgUnc3tZIVeVUp3ZaCfnjO2l/eo7k0gDMqQGrIUjoR9IiyBD6qXlW7Z4u0dwnTJ\n8kzl0JbCqv0mMv3P5N/IHutX0QN/a/X2dAGKDVwEZ5HhqFwWpYmWggVOuepsOuPP\nd+UFnX7Okmng8YcbV8sOUs4V\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-e1iv8@cosmetic-messaging.iam.gserviceaccount.com",
+  "client_id": "116531102167435592647",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-e1iv8%40cosmetic-messaging.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

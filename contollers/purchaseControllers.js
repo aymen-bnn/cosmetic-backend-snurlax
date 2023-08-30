@@ -4,6 +4,13 @@ const User = require('../models/userModel')
 const Product = require('../models/productModel')
 const Cart = require('../models/cartModel')
 const jwt = require('jsonwebtoken')
+const admin = require('firebase-admin');
+
+const serviceAccount = require('../config/firebase-notification.json');
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+});
 const create = async (req, res) => {
     const { additional } = req.body;
     const { token } = req.headers;
@@ -43,7 +50,23 @@ const create = async (req, res) => {
                 additional: additionalValue,
                 total: totalPrice,
             });
+            const admins = await User.find({ isAdmin: true });
 
+            admins.forEach(async (admin) => {
+              if (admin.fcmToken) {
+                const message = {
+                  notification: {
+                    title: "New Purchase",
+                    body: `${user.fullName} made a purchase. Total: ${totalPrice}`
+                  },
+                  token: admin.fcmToken}
+                  try {
+                    await admin.messaging().send(message);
+                  } catch (error) {
+                    console.log(error.message)
+                }}})
+      
+      
             res.status(200).json({ purchase });
         });
     } catch (error) {

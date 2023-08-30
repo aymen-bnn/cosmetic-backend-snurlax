@@ -43,7 +43,11 @@ const userSchema = new Schema({
     codeVerification: {
         type: Number , 
         default : null
-    }
+    },
+    fcmToken: {
+        type: String,
+        default: null, 
+    },
 })
 
 module.exports = mongoose.model('User', userSchema)

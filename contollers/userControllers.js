@@ -1,4 +1,3 @@
-
 const User = require('../models/userModel')
 const validator = require('validator')
 const bcrypt = require('bcrypt')
@@ -6,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const fs = require('fs');
 const nodemailer = require('nodemailer')
 require("dotenv").config()
+
 const register = async (req, res) => {
     try {
         const { fullName, username, email, password, phone, confirmedPassword } = req.body
@@ -51,7 +51,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
 
-    const { email, password } = req.body
+    const { email, password , fcmToken } = req.body
 
     if (!email || !password) {
         return res.status(400).json({ error: "all fields are required" })
@@ -79,6 +79,12 @@ const login = async (req, res) => {
 
 
         const token = await jwt.sign({ user }, process.env.JWT_TOKEN_KEY, { expiresIn: '365d' })
+
+        if (fcmToken) {
+            user.fcmToken = fcmToken;
+            await user.save();
+        }
+
         res.status(200).json({ user, token })
     } catch (error) {
         console.log(error)
