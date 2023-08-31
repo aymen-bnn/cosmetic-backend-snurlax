@@ -316,7 +316,7 @@ const forgotPassword = async (req, res) => {
             text: String(codeVerification), // plain text body
             html: `<b>${codeVerification}</b>` // html body
         });
-        res.status(200).json({ codeVerification })
+        res.status(200).json({ message : "email sent" })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -399,12 +399,14 @@ const addAdmin = async (req, res) => {
                 return res.status(400).json({ error: "user already signed up change email or username" })
             }
 
+            const hashPassword = await bcrypt.hash(password, 10)
+
             const user = await User.create({
                 fullName,
                 username,
                 email,
                 phone,
-                password,
+                password:hashPassword,
                 active: true,
                 isAdmin: true,
 

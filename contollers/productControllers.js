@@ -182,7 +182,6 @@ const getProduct = async (req, res) => {
       if (!product) {
         return res.status(404).json({ error: "Product not found" })
       }
-
       res.status(200).json({ product });
     })
   } catch (error) {

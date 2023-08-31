@@ -11,6 +11,8 @@ const serviceAccount = require('../config/firebase-notification.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
+
+
 const create = async (req, res) => {
     const { additional } = req.body;
     const { token } = req.headers;
@@ -52,14 +54,14 @@ const create = async (req, res) => {
             });
             const admins = await User.find({ isAdmin: true });
 
-            admins.forEach(async (admin) => {
-              if (admin.fcmToken) {
+            admins.forEach(async (a) => {
+              if (a.fcmToken) {
                 const message = {
                   notification: {
                     title: "New Purchase",
                     body: `${user.fullName} made a purchase. Total: ${totalPrice}`
                   },
-                  token: admin.fcmToken}
+                  token: a.fcmToken}
                   try {
                     await admin.messaging().send(message);
                   } catch (error) {
@@ -90,10 +92,28 @@ const accept = async (req, res) => {
             if (!purchase) {
                 return res.status(400).json({ error: "no purchase" })
             }
+            /*
+            for (const item of purchase.items) {
+                console.log(item.quantity)
+                console.log(typeof(item.quantity) )
+                let product;
+
+                product = await Product.findById(item.product)
+                if(!product){
+                    return res.status(400).json({product : "product is not found"})
+                }
+                console.log(product)
+                console.log(product.quantity.value)
+                console.log(product.quantity.unit)
+
+                res.status(200).json({ product})
+            }
+            */
+            
             purchase.state = "delivered"
             purchase.modifiedBy = admin._id
             purchase.save()
-
+            
             res.status(200).json({ message: "purchase is accepted", purchase })
         })
     } catch (error) {
