@@ -40,8 +40,6 @@ const createProduct = async (req, res) => {
         categoryIds.push(foundCategory._id);
       }
 
-      console.log("categoryIds:", categoryIds);
-
       const product = await Product.create({
         owner: admin._id,
         name,
@@ -60,8 +58,7 @@ const createProduct = async (req, res) => {
       res.status(200).json({ message: "Product created successfully", product });
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ error: "An error occurred" });
+    res.status(400).json({error : error.message})
   }
 };
 
@@ -124,8 +121,7 @@ const updateProduct = async (req, res) => {
       res.status(200).json({ message: "Product updated successfully", product: updatedProduct });
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ error: "An error occurred" });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -138,7 +134,6 @@ const deleteProduct = async (req, res) => {
       if (err) {
         return res.status(400).json({ error: "Invalid token" });
     }
-      console.log(data)
       const admin = await User.findOne({ email: data.user.email })
       //check if the user is admin 
       if (!admin.isAdmin) {
@@ -167,10 +162,8 @@ const getProduct = async (req, res) => {
       if (err) {
         return res.status(400).json({ error: "Invalid token" });
     }
-      console.log(data)
+
       const user = await User.findOne({ email: data.user.email })
-
-
       let product
 
       if (user.isAdmin) {
@@ -182,6 +175,7 @@ const getProduct = async (req, res) => {
       if (!product) {
         return res.status(404).json({ error: "Product not found" })
       }
+      
       res.status(200).json({ product });
     })
   } catch (error) {
@@ -229,7 +223,7 @@ const getAllDeleted = async (req, res) => {
       if (err) {
         return res.status(400).json({ error: "Invalid token" });
     }
-      console.log(data);
+      
       const admin = await User.findOne({ email: data.user.email });
       // check if the user is admin
       if (!admin.isAdmin) {
@@ -251,7 +245,7 @@ const getAllActive = async (req, res) => {
       if (err) {
         return res.status(400).json({ error: "Invalid token" });
     }
-      console.log(data)
+     
       const admin = await User.findOne({ email: data.user.email })
       //check if the user is admin 
       if (!admin.isAdmin) {

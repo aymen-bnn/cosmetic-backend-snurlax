@@ -52,6 +52,10 @@ const create = async (req, res) => {
                 additional: additionalValue,
                 total: totalPrice,
             });
+            //free cart
+            cart.items = []
+            await cart.save()
+
             const admins = await User.find({ isAdmin: true });
 
             admins.forEach(async (a) => {
@@ -62,7 +66,7 @@ const create = async (req, res) => {
                     body: `${user.fullName} made a purchase. Total: ${totalPrice}`
                   },
                   token: a.fcmToken}
-                  try {
+                  try { 
                     await admin.messaging().send(message);
                   } catch (error) {
                     console.log(error.message)
@@ -76,50 +80,57 @@ const create = async (req, res) => {
     }
 }
 const accept = async (req, res) => {
+    const { purchaseId } = req.params;
+    const { token } = req.headers;
 
-    const { purchaseId } = req.params
-    const { token } = req.headers
     try {
+        // Verify the admin token
         jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
             if (err) {
                 return res.status(400).json({ error: "Invalid token" });
             }
-            const admin = await User.findOne({ email: data.user.email })
+            const admin = await User.findOne({ email: data.user.email });
             if (!admin.isAdmin) {
-                return res.status(400).json({ error: " authorisation error" })
+                return res.status(400).json({ error: "Authorization error" });
             }
-            const purchase = await Purchase.findOne({ _id: purchaseId })
+
+            const purchase = await Purchase.findOne({ _id: purchaseId });
             if (!purchase) {
-                return res.status(400).json({ error: "no purchase" })
+                return res.status(400).json({ error: "No purchase found" });
             }
-            /*
+
             for (const item of purchase.items) {
-                console.log(item.quantity)
-                console.log(typeof(item.quantity) )
-                let product;
+                const product = await Product.findOne({ _id: item.product });
 
-                product = await Product.findById(item.product)
-                if(!product){
-                    return res.status(400).json({product : "product is not found"})
+                if (!product) {
+                    return res.status(400).json({ product: "Product is not found" });
                 }
-                console.log(product)
-                console.log(product.quantity.value)
-                console.log(product.quantity.unit)
+                
+                // Calculate the new quantity and update the product
+                const newQuantity = product.quantity.value - item.quantity;
+                if (newQuantity < 0) {
+                    return res.status(400).json({ product: "Not enough quantity" });
+                }
+                
+                product.quantity.value = newQuantity;
 
-                res.status(200).json({ product})
+                // Save the updated product
+                await product.save();
+                
             }
-            */
+
+            // Update purchase state and modifiedBy
             
-            purchase.state = "delivered"
-            purchase.modifiedBy = admin._id
-            purchase.save()
-            
-            res.status(200).json({ message: "purchase is accepted", purchase })
-        })
+            purchase.state = "accepted";
+            purchase.modifiedBy = admin._id;
+            await purchase.save();
+
+            res.status(200).json({ message: "Purchase is accepted", purchase });
+        });
     } catch (error) {
-        res.status(400).json({ error })
+        res.status(400).json({ error });
     }
-}
+};
 
 const refuse = async (req, res) => {
     const { purchaseId } = req.params

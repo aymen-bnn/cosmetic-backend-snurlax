@@ -11,7 +11,6 @@ const addToCart = async (req, res) => {
         return res.status(400).json({ error: 'Invalid token' });
       }
       const user = await User.findOne({ email: data.user.email })
-      console.log(user)
       let cart = await Cart.findOne({ userId: user._id });
       if (!cart) {
         cart = await Cart.create({ userId: user._id, items: [] });

@@ -42,8 +42,7 @@ const register = async (req, res) => {
         res.status(200).json({ message: "user created succesfully", user })
 
     } catch (error) {
-        console.log(error)
-        res.status(400).json({ error: "error occured" })
+        res.status(400).json({ error: error.message })
     }
 
 
@@ -87,8 +86,7 @@ const login = async (req, res) => {
 
         res.status(200).json({ user, token })
     } catch (error) {
-        console.log(error)
-        res.status(400).json({ error })
+        res.status(400).json({ error : error.message})
     }
 }
 
@@ -101,7 +99,6 @@ const profile = async (req, res) => {
 
     jwt.verify(token, process.env.JWT_TOKEN_KEY, (error, user) => {
         if (error) {
-            console.log({ message: 'Invalid token.' });
             return res.status(401).json({ message: 'Invalid token.' });
         }
         res.status(200).json({ user })
@@ -147,7 +144,6 @@ const refuse = async (req, res) => {
             if (err) {
                 return res.status(400).json({ error: "Invalid token" });
             }
-            console.log(data)
             const admin = await User.findOne({ email: data.user.email })
             //check if the user is admin 
             if (!admin.isAdmin) {
@@ -169,7 +165,6 @@ const getNotActiveUsers = async (req, res) => {
             if (err) {
                 return res.status(400).json({ error: "Invalid token" });
             }
-            console.log(data)
             const admin = await User.findOne({ email: data.user.email })
 
             if (!admin.isAdmin) {
@@ -191,7 +186,6 @@ const getActiveUsers = async (req, res) => {
             if (err) {
                 return res.status(400).json({ error: "Invalid token" });
             }
-            console.log(data)
             const admin = await User.findOne({ email: data.user.email })
 
             if (!admin.isAdmin) {
@@ -213,7 +207,6 @@ const getAllUsers = async (req, res) => {
             if (err) {
                 return res.status(400).json({ error: "Invalid token" });
             }
-            console.log(data)
             const admin = await User.findOne({ email: data.user.email })
 
             if (!admin.isAdmin) {
@@ -294,9 +287,7 @@ const forgotPassword = async (req, res) => {
         if (!user || !user.active) {
             return res.status(400).json({ error: "user doesn't exist" })
         }
-        console.log(codeVerification)
         user.codeVerification = codeVerification
-        console.log(process.env.MAILEREMAIL, process.env.MAILERPASSWORD)
         await user.save()
 
         const transporter = nodemailer.createTransport({
