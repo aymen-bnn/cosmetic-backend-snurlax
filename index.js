@@ -39,7 +39,10 @@ app.post('/upload' ,multerMiddleware.array('photos', 100) , upload)
 
 //connecting to the database and initialising the app 
 const PORT = process.env.PORT || 4000
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_LOCAL_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
 .then(()=>{
     console.log('connected to the database')
     app.listen(PORT , () => {
