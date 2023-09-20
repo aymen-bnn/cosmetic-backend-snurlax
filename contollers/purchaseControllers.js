@@ -76,7 +76,7 @@ const create = async (req, res) => {
             res.status(200).json({ purchase });
         });
     } catch (error) {
-        res.status(400).json({ error });
+        res.status(400).json({ error : error.message });
     }
 }
 const accept = async (req, res) => {
@@ -128,7 +128,7 @@ const accept = async (req, res) => {
             res.status(200).json({ message: "Purchase is accepted", purchase });
         });
     } catch (error) {
-        res.status(400).json({ error });
+        res.status(400).json({ error : error.message });
     }
 };
 
@@ -155,7 +155,7 @@ const refuse = async (req, res) => {
             res.status(200).json({ message: "purchase is refused", purchase })
         })
     } catch (error) {
-        res.status(400).json({ error })
+        res.status(400).json({ error : error.message })
     }
 }
 
