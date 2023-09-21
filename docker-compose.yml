@@ -16,6 +16,7 @@ services:
     container_name: node_container
     ports: 
       - 4000:4000
+    restart: always
     environment:
        PORT: 4000
        MONGO_LOCAL_URL : mongodb://mongo_db:27017/cosmetic
