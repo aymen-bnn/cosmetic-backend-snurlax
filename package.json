@@ -13,5 +13,9 @@
     "nodemailer": "^6.9.4",
     "nodemon": "^2.0.22",
     "validator": "^13.9.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   }
 }
