@@ -1,0 +1,39 @@
+version: '3.6'
+
+services:
+  mongo_db:
+    container_name: db_container
+    ports:
+      - 27017:27017
+    image: mongo:latest
+    restart: always
+    volumes: 
+     - mongo_db_volume:/data/db
+    networks:
+      - cosmetic_network
+  api:
+    build: .
+    container_name: node_container
+    ports: 
+      - 4000:4000
+    restart: always
+    environment:
+       PORT: 4000
+       MONGO_LOCAL_URL : mongodb://mongo_db:27017/cosmetic
+       JWT_TOKEN_KEY : EbeK92eeIz8hFa64qFyIrIpr7pwwvC3E
+       MAILEREMAIL : sarlmagicpro@gmail.com
+       MAILERPASSWORD : lxiuzwupmztgdtko
+    depends_on:
+      - mongo_db
+    volumes:
+      - uploaded_images:/src/app/uploads 
+    networks:
+      - cosmetic_network
+
+volumes:
+  mongo_db_volume: {}
+  uploaded_images:
+
+networks:
+  cosmetic_network:
+    driver: bridge
