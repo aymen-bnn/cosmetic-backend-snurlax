@@ -21,8 +21,8 @@ const register = async (req, res) => {
             return res.status(400).json({ error: "email must be valid" })
         }
         //validate password 
-        if (!validator.isStrongPassword(password)) {
-            return res.status(400).json({ error: "password must be strong" })
+        if (password.length < 8) {
+            return res.status(400).json({ error: "password must be 8 caracters" })
         }
         //check if user is already in signed in
         const checkUser = await User.findOne().or([{ email }, { username }]);
@@ -50,7 +50,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
 
-    const { email, password , fcmToken } = req.body
+    const { email, password, fcmToken } = req.body
 
     if (!email || !password) {
         return res.status(400).json({ error: "all fields are required" })
@@ -86,7 +86,7 @@ const login = async (req, res) => {
 
         res.status(200).json({ user, token })
     } catch (error) {
-        res.status(400).json({ error : error.message})
+        res.status(400).json({ error: error.message })
     }
 }
 
@@ -258,8 +258,9 @@ const changePassword = async (req, res) => {
                 return res.status(400).json({ error: "password is wrong" })
             }
 
-            if (!validator.isStrongPassword(newPassword)) {
-                return res.status(400).json({ error: "password must be strong" })
+            //validate password 
+            if (newPassword.length < 8) {
+                return res.status(400).json({ error: "password must be 8 caracters" })
             }
 
             const hashPassword = await bcrypt.hash(newPassword, 10)
@@ -307,7 +308,7 @@ const forgotPassword = async (req, res) => {
             text: String(codeVerification), // plain text body
             html: `<b>${codeVerification}</b>` // html body
         });
-        res.status(200).json({ message : "email sent" })
+        res.status(200).json({ message: "email sent" })
     } catch (error) {
         res.status(400).json({ error: error.message })
     }
@@ -334,8 +335,9 @@ const confirmForgotPasswort = async (req, res) => {
             return res.status(400).json({ error: "code verification is wrong" })
         }
 
-        if (!validator.isStrongPassword(password)) {
-            return res.status(400).json({ error: "password must be strong" })
+        //validate password 
+        if (password.length < 8) {
+            return res.status(400).json({ error: "password must be 8 caracters" })
         }
 
         const hashPassword = await bcrypt.hash(password, 10)
@@ -381,8 +383,8 @@ const addAdmin = async (req, res) => {
                 return res.status(400).json({ error: "email must be valid" })
             }
             //validate password 
-            if (!validator.isStrongPassword(password)) {
-                return res.status(400).json({ error: "password must be strong" })
+            if (password.length < 8) {
+                return res.status(400).json({ error: "password must be 8 caracters" })
             }
             //check if user is already in signed in
             const checkUser = await User.findOne().or([{ email }, { username }]);
@@ -397,7 +399,7 @@ const addAdmin = async (req, res) => {
                 username,
                 email,
                 phone,
-                password:hashPassword,
+                password: hashPassword,
                 active: true,
                 isAdmin: true,
 
