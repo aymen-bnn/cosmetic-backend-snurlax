@@ -82,8 +82,7 @@ const updateProduct = async (req, res) => {
 
       const categoryIds = [];
 
-      for (const categoryName of categories.split(" ")) {
-        let foundCategory = await Category.findOne({ name: categoryName });
+        let foundCategory = await Category.findOne({ name: categories.trim() });
 
         if (!foundCategory) {
           // If the category doesn't exist, create a new one
@@ -91,9 +90,7 @@ const updateProduct = async (req, res) => {
         }
 
         categoryIds.push(foundCategory._id);
-      }
-
-
+        
       const updatedProduct = await Product.findOneAndUpdate(
         { _id: productId},
         {
