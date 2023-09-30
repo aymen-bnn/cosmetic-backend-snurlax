@@ -29,8 +29,7 @@ const createProduct = async (req, res) => {
 
       const categoryIds = [];
 
-      for (const categoryName of categories.split(" ")) {
-        let foundCategory = await Category.findOne({ name: categoryName });
+        let foundCategory = await Category.findOne({ name: categories.trim() });
 
         if (!foundCategory) {
           // If the category doesn't exist, create a new one
@@ -38,7 +37,7 @@ const createProduct = async (req, res) => {
         }
 
         categoryIds.push(foundCategory._id);
-      }
+
 
       const product = await Product.create({
         owner: admin._id,

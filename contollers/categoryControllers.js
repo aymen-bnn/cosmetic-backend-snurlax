@@ -20,7 +20,10 @@ const createCategory = async (req, res) => {
             if (!admin.isAdmin) {
                 return res.status(400).json({ error: " authorisation error" })
             }
-            const category = await Category.create({name , image , owner : admin._id})
+            const category = await Category.create({
+                name : name.trim() , 
+                image , 
+                owner : admin._id})
             res.status(200).json({ message: "category created successfully", category })
     
         })
