@@ -3,6 +3,8 @@ const Product = require('../models/productModel')
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const Category = require('../models/categoryModel')
+const Cart = require('../models/cartModel')
+const Purchase = require('../models/purchaseModel')
 
 const createProduct = async (req, res) => {
   const { name, price, images, description, quantity, value, unit, volume, brand, categories } = req.body;
@@ -121,7 +123,35 @@ const updateProduct = async (req, res) => {
   }
 };
 
+/*
+const deleteProduct = async (req, res) => {
+  const { productId } = req.params
+  const { token } = req.headers
+  try {
+    jwt.verify(token, process.env.JWT_TOKEN_KEY, async (err, data) => {
+      if (err) {
+        return res.status(400).json({ error: "Invalid token" });
+    }
+      const admin = await User.findOne({ email: data.user.email })
+      check if the user is admin 
+      if (!admin.isAdmin) {
+        return res.status(400).json({ error: " authorisation error" })
+      }
 
+      const product = await Product.findById(productId).populate('category');
+
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+
+      const deletedProduct = await Product.updateOne({ _id: productId }, { state: "archived" })
+      res.status(200).json({ message: "product archived successfully", deletedProduct })
+    })
+  } catch (error) {
+    res.status(400).json({ error })
+  }
+}
+*/
 const deleteProduct = async (req, res) => {
   const { productId } = req.params
   const { token } = req.headers
@@ -142,14 +172,28 @@ const deleteProduct = async (req, res) => {
         return res.status(404).json({ error: 'Product not found' });
       }
 
-      const deletedProduct = await Product.updateOne({ _id: productId }, { state: "archived" })
-      res.status(200).json({ message: "product archived successfully", deletedProduct })
+      //const deletedProduct = await Product.deleteMany({ _id: productId })
+      await Purchase.updateMany(
+        { 'items.product': productId },
+        { $pull: { items: { product: productId } } }
+      );
+
+      await User.updateMany(
+        { favorites: productId },
+        { $pull: { favorites: productId } }
+      );
+
+      await Cart.updateMany(
+        { 'items.product': productId },
+        { $pull: { items: { product: productId } } }
+      );
+      await Product.deleteMany({ _id: productId })
+      res.status(200).json({ message: "product deleted successfully" })
     })
   } catch (error) {
     res.status(400).json({ error })
   }
 }
-
 const getProduct = async (req, res) => {
   const { productId } = req.params
   const { token } = req.headers
